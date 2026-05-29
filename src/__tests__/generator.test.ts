@@ -35,6 +35,16 @@ describe("ProjectGenerator", () => {
     expect(fs.existsSync(path.join(projectPath, "main.go"))).toBe(true);
     expect(fs.existsSync(path.join(projectPath, "go.mod"))).toBe(true);
     expect(fs.existsSync(path.join(projectPath, "README.md"))).toBe(true);
+    expect(fs.existsSync(path.join(projectPath, ".cursorrules"))).toBe(true);
+    const cursorRules = await fs.readFile(path.join(projectPath, ".cursorrules"), "utf-8");
+    expect(cursorRules).toContain("🤖 AI Agent Scaffolding Guidelines");
+    expect(cursorRules).toContain("🐹 Go Guidelines");
+
+    expect(fs.existsSync(path.join(projectPath, "docs/AGENTS.md"))).toBe(true);
+    expect(fs.existsSync(path.join(projectPath, "docs/instructions.md"))).toBe(true);
+    const docsAgents = await fs.readFile(path.join(projectPath, "docs/AGENTS.md"), "utf-8");
+    expect(docsAgents).toContain("🤖 AI Agent Project Guidelines");
+    expect(docsAgents).toContain("Welcome, AI Agent!");
   });
 
   test("should create a Node.js Express API project", async () => {
@@ -53,6 +63,15 @@ describe("ProjectGenerator", () => {
     expect(fs.existsSync(path.join(projectPath, "package.json"))).toBe(true);
     expect(fs.existsSync(path.join(projectPath, "src/index.ts"))).toBe(true);
     expect(fs.existsSync(path.join(projectPath, "tsconfig.json"))).toBe(true);
+    expect(fs.existsSync(path.join(projectPath, ".cursorrules"))).toBe(true);
+    const cursorRules = await fs.readFile(path.join(projectPath, ".cursorrules"), "utf-8");
+    expect(cursorRules).toContain("🟢 Node.js & TypeScript Guidelines");
+
+    expect(fs.existsSync(path.join(projectPath, "docs/AGENTS.md"))).toBe(true);
+    expect(fs.existsSync(path.join(projectPath, "docs/instructions.md"))).toBe(true);
+    const docsInstructions = await fs.readFile(path.join(projectPath, "docs/instructions.md"), "utf-8");
+    expect(docsInstructions).toContain("Developer Setup & Playbook");
+    expect(docsInstructions).toContain("Node.js");
   });
 
   test("should create a Python FastAPI project", async () => {
@@ -72,6 +91,14 @@ describe("ProjectGenerator", () => {
     expect(fs.existsSync(path.join(projectPath, "requirements.txt"))).toBe(
       true
     );
+    expect(fs.existsSync(path.join(projectPath, ".cursorrules"))).toBe(true);
+    const cursorRules = await fs.readFile(path.join(projectPath, ".cursorrules"), "utf-8");
+    expect(cursorRules).toContain("🐍 Python & PEP 8 Guidelines");
+
+    expect(fs.existsSync(path.join(projectPath, "docs/AGENTS.md"))).toBe(true);
+    expect(fs.existsSync(path.join(projectPath, "docs/instructions.md"))).toBe(true);
+    const docsAgents = await fs.readFile(path.join(projectPath, "docs/AGENTS.md"), "utf-8");
+    expect(docsAgents).toContain("AI Agent Project Guidelines");
   });
 
   test("should throw error if directory already exists", async () => {

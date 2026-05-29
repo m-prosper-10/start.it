@@ -90,6 +90,54 @@ async function main() {
           choices: ["small", "medium", "large"],
         },
         {
+          type: "list",
+          name: "architecture",
+          message: "Architecture style:",
+          choices: [
+            "Clean / Layered Monolith",
+            "Microservices",
+            "Serverless",
+            "MVC",
+            "Event-Driven",
+          ],
+        },
+        {
+          type: "list",
+          name: "database",
+          message: "Primary database choice:",
+          choices: [
+            "PostgreSQL",
+            "MongoDB",
+            "SQLite",
+            "MySQL",
+            "Redis (Cache/Store)",
+            "None",
+          ],
+        },
+        {
+          type: "list",
+          name: "frontendStack",
+          message: "Preferred frontend stack:",
+          choices: [
+            "React + Tailwind",
+            "Next.js",
+            "Vue",
+            "Vanilla HTML/CSS/JS",
+            "None",
+          ],
+        },
+        {
+          type: "checkbox",
+          name: "devops",
+          message: "Select CI/CD & DevOps tools:",
+          choices: [
+            "Docker",
+            "GitHub Actions",
+            "Kubernetes",
+            "Terraform",
+          ],
+        },
+        {
           type: "input",
           name: "deployment",
           message: "Deployment target (optional):",
@@ -127,6 +175,10 @@ async function main() {
         scale: aiAnswers.scale,
         deployment: aiAnswers.deployment,
         features: aiAnswers.features,
+        architecture: aiAnswers.architecture,
+        database: aiAnswers.database,
+        frontendStack: aiAnswers.frontendStack,
+        devops: aiAnswers.devops,
       });
     }
 

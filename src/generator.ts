@@ -4,7 +4,7 @@ import chalk from "chalk";
 import ora from "ora";
 import { ProjectConfig } from "./types";
 import { getTemplate } from "./templates";
-import { getAgentRules } from "./utils/agentRules";
+import { getAgentRules, getDocsAgents, getDocsInstructions } from "./utils/agentRules";
 
 export class ProjectGenerator {
   private config: ProjectConfig;
@@ -53,6 +53,18 @@ export class ProjectGenerator {
         this.config.options?.template || ""
       );
       await fs.writeFile(path.join(projectPath, ".cursorrules"), rulesContent);
+
+      // Create docs directory and write default instruction files
+      const docsDir = path.join(projectPath, "docs");
+      await fs.ensureDir(docsDir);
+      await fs.writeFile(
+        path.join(docsDir, "AGENTS.md"),
+        getDocsAgents(this.config.framework, this.config.options?.template || "")
+      );
+      await fs.writeFile(
+        path.join(docsDir, "instructions.md"),
+        getDocsInstructions(this.config.framework, this.config.options?.template || "")
+      );
 
       spinner.succeed("Project structure created");
     } catch (error) {
