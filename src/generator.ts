@@ -4,6 +4,7 @@ import chalk from "chalk";
 import ora from "ora";
 import { ProjectConfig } from "./types";
 import { getTemplate } from "./templates";
+import { scaffoldFrontendProject } from "./frontend/scaffold";
 import { getAgentRules, getDocsAgents, getDocsInstructions } from "./utils/agentRules";
 
 export class ProjectGenerator {
@@ -30,17 +31,19 @@ export class ProjectGenerator {
       // Create project directory
       await fs.ensureDir(projectPath);
 
-      // Get template for the framework
-      const template = getTemplate(this.config);
+      if (this.config.appType === "frontend") {
+        await scaffoldFrontendProject(this.config, projectPath);
+      } else {
+        const template = getTemplate(this.config);
 
-      // Create all files from template
-      for (const file of template.files) {
-        const filePath = path.join(projectPath, file.path);
-        await fs.ensureDir(path.dirname(filePath));
-        await fs.writeFile(filePath, file.content);
+        for (const file of template.files) {
+          const filePath = path.join(projectPath, file.path);
+          await fs.ensureDir(path.dirname(filePath));
+          await fs.writeFile(filePath, file.content);
 
-        if (file.isExecutable) {
-          await fs.chmod(filePath, 0o755);
+          if (file.isExecutable) {
+            await fs.chmod(filePath, 0o755);
+          }
         }
       }
 

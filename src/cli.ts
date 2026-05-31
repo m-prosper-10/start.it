@@ -358,7 +358,7 @@ async function promptForFrontendOptions(
     "appName" | "routing" | "styling" | "uiAddon" | "stateManagement" | "dataFetching" | "testing"
   >
 > {
-  return inquirer.prompt([
+  const answers = await inquirer.prompt([
     {
       type: "input",
       name: "appName",
@@ -420,6 +420,11 @@ async function promptForFrontendOptions(
       default: "vitest-rtl",
     },
   ]);
+
+  return answers as Pick<
+    FrontendGenerationConfig,
+    "appName" | "routing" | "styling" | "uiAddon" | "stateManagement" | "dataFetching" | "testing"
+  >;
 }
 
 function getNextSteps(stack: SupportedStack): string[] {
