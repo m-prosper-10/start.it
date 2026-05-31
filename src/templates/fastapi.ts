@@ -1,4 +1,10 @@
-import { BackendDatabase, BackendGenerationConfig, ProjectConfig, TemplateConfig } from "../types";
+import {
+  BackendDatabase,
+  BackendGenerationConfig,
+  ProjectConfig,
+  TemplateConfig,
+  TemplateOptions,
+} from "../types";
 
 const DATABASE_LABELS: Record<BackendDatabase, string> = {
   postgresql: "PostgreSQL",
@@ -151,9 +157,17 @@ function getBackendOptions(config: ProjectConfig): BackendGenerationConfig {
     securityPreset: config.options?.securityPreset || "none",
     logging: config.options?.logging || "python-logging",
     monitoring: config.options?.monitoring || "health-only",
-    testing: config.options?.testing || "pytest-httpx",
+    testing: normalizeFastApiTesting(config.options?.testing),
     apiStyle: config.options?.apiStyle || "rest",
   };
+}
+
+function normalizeFastApiTesting(
+  testing: TemplateOptions["testing"] | undefined
+): BackendGenerationConfig["testing"] {
+  return testing === "pytest" || testing === "pytest-httpx"
+    ? testing
+    : "pytest-httpx";
 }
 
 function buildRequirements(options: BackendGenerationConfig): string {

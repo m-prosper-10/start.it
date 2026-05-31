@@ -1,4 +1,10 @@
-import { BackendDatabase, BackendGenerationConfig, ProjectConfig, TemplateConfig } from "../types";
+import {
+  BackendDatabase,
+  BackendGenerationConfig,
+  ProjectConfig,
+  TemplateConfig,
+  TemplateOptions,
+} from "../types";
 
 const DATABASE_LABELS: Record<BackendDatabase, string> = {
   postgresql: "PostgreSQL",
@@ -312,7 +318,7 @@ function getBackendOptions(config: ProjectConfig): BackendGenerationConfig {
       securityPreset: config.options.securityPreset || "none",
       logging: config.options.logging || "console",
       monitoring: config.options.monitoring || "health-only",
-      testing: config.options.testing || "jest-supertest",
+      testing: normalizeNodeTesting(config.options.testing),
       apiStyle: config.options.apiStyle || "rest",
     };
   }
@@ -329,6 +335,14 @@ function getBackendOptions(config: ProjectConfig): BackendGenerationConfig {
     testing: "jest-supertest",
     apiStyle: "rest",
   };
+}
+
+function normalizeNodeTesting(
+  testing: TemplateOptions["testing"] | undefined
+): BackendGenerationConfig["testing"] {
+  return testing === "jest" || testing === "jest-supertest"
+    ? testing
+    : "jest-supertest";
 }
 
 function buildPackageJson(

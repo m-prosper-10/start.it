@@ -1,7 +1,12 @@
 import path from "path";
 import { spawnSync } from "child_process";
 import fs from "fs-extra";
-import { FrontendGenerationConfig, ProjectConfig } from "../types";
+import {
+  FrontendGenerationConfig,
+  FrontendTestingOption,
+  ProjectConfig,
+  TemplateOptions,
+} from "../types";
 
 export async function scaffoldFrontendProject(
   config: ProjectConfig,
@@ -28,9 +33,15 @@ function getFrontendOptions(config: ProjectConfig): FrontendGenerationConfig {
     uiAddon: config.options?.uiAddon || "none",
     stateManagement: config.options?.stateManagement || "none",
     dataFetching: config.options?.dataFetching || "fetch",
-    testing: config.options?.testing || "vitest",
+    testing: normalizeFrontendTesting(config.options?.testing),
     baselineSource: config.options?.baselineSource || "auto",
   };
+}
+
+function normalizeFrontendTesting(
+  testing: TemplateOptions["testing"] | undefined
+): FrontendTestingOption {
+  return testing === "vitest" || testing === "vitest-rtl" ? testing : "vitest";
 }
 
 async function scaffoldReactViteProject(
@@ -244,6 +255,7 @@ async function customizeReactViteProject(
   await fs.ensureDir(path.join(projectDir, "src/components"));
   await fs.ensureDir(path.join(projectDir, "src/features/home"));
   await fs.ensureDir(path.join(projectDir, "src/lib"));
+  await fs.ensureDir(path.join(projectDir, "src/test"));
 
   await fs.writeFile(
     path.join(projectDir, "src/features/home/HomePage.tsx"),
