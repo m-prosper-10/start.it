@@ -1,6 +1,7 @@
 import { ProjectConfig, TemplateOptions } from "../types";
 import {
   composeAppTypeBlock,
+  composeBackendStackBlock,
   composeCursorPrinciples,
   composeProfileBlock,
   composeSharedConstitution,
@@ -132,28 +133,16 @@ function buildStackRules(config: ProjectConfig): string[] {
     rules.push(...appTypeLines);
   }
 
+  const backendStackLines = composeBackendStackBlock(config);
+  if (backendStackLines.length > 0) {
+    rules.push("", ...backendStackLines);
+  }
+
   switch (config.stack) {
     case "node-ts-express":
-      rules.push(
-        "",
-        "### Express Stack Rules",
-        "",
-        "Keep controllers thin and services focused on business logic.",
-        "Preserve route versioning and centralized middleware wiring.",
-        "Update env setup, config, and tests alongside behavior changes."
-      );
-      break;
     case "nestjs":
-      rules.push(
-        "",
-        "### NestJS Stack Rules",
-        "",
-        "Preserve module, provider, and controller boundaries.",
-        "Prefer adding behavior to existing modules before creating new modules.",
-        "Keep framework wiring declarative."
-      );
-      break;
     case "python-fastapi":
+      break;
     case "python-fastapi-serving":
       rules.push(
         "",
