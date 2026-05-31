@@ -6,10 +6,13 @@ import {
 } from "./blocks/appType/backend";
 import { getDsaStandardsBlock } from "./blocks/appType/dsa";
 import { getFrontendStandardsBlock } from "./blocks/appType/frontend";
+import { getCppInferenceStackBlock } from "./blocks/stack/cppInference";
 import { getNextJsStackBlock } from "./blocks/stack/nextjs";
 import { getNestJsStackBlock } from "./blocks/stack/nestjs";
 import { getNodeTsExpressStackBlock } from "./blocks/stack/nodeTsExpress";
 import { getPythonFastApiStackBlock } from "./blocks/stack/pythonFastApi";
+import { getPythonFastApiServingStackBlock } from "./blocks/stack/pythonFastApiServing";
+import { getRAnalyticsStackBlock } from "./blocks/stack/rAnalytics";
 import { getReactViteStackBlock } from "./blocks/stack/reactVite";
 import { getArchitectureBlock } from "./blocks/shared/architecture";
 import { getDebuggingBlock } from "./blocks/shared/debugging";
@@ -92,6 +95,19 @@ export function composeFrontendStackBlock(config: ProjectConfig): string[] {
       return getReactViteStackBlock();
     case "nextjs":
       return getNextJsStackBlock();
+    default:
+      return [];
+  }
+}
+
+export function composeAiMlStackBlock(config: ProjectConfig): string[] {
+  switch (config.stack) {
+    case "python-fastapi-serving":
+      return getPythonFastApiServingStackBlock();
+    case "r-analytics":
+      return getRAnalyticsStackBlock();
+    case "cpp-inference":
+      return getCppInferenceStackBlock();
     default:
       return [];
   }
