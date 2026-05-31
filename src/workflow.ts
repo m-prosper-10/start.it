@@ -19,7 +19,6 @@ export const APP_TYPE_CHOICES: DisabledChoice[] = [
   {
     name: "DSA-specific",
     value: "dsa-specific",
-    disabled: "Coming soon",
   },
 ];
 
@@ -62,7 +61,12 @@ export const STACK_CHOICES: Record<AppType, DisabledChoice[]> = {
       value: "cpp-inference",
     },
   ],
-  "dsa-specific": [],
+  "dsa-specific": [
+    {
+      name: "C++",
+      value: "dsa-cpp",
+    },
+  ],
 };
 
 export function getStackChoices(appType: AppType): DisabledChoice[] {
@@ -84,6 +88,7 @@ export function getFrameworkForStack(stack: SupportedStack): string {
     case "r-analytics":
       return "R";
     case "cpp-inference":
+    case "dsa-cpp":
       return "C++";
     default:
       throw new Error(`Unsupported stack "${stack}"`);
