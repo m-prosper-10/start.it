@@ -7,6 +7,8 @@ import {
 import { getDsaStandardsBlock } from "./blocks/appType/dsa";
 import { getFrontendStandardsBlock } from "./blocks/appType/frontend";
 import { getCppInferenceStackBlock } from "./blocks/stack/cppInference";
+import { getDsaCppStackBlock } from "./blocks/stack/dsaCpp";
+import { getDsaPythonStackBlock } from "./blocks/stack/dsaPython";
 import { getNextJsStackBlock } from "./blocks/stack/nextjs";
 import { getNestJsStackBlock } from "./blocks/stack/nestjs";
 import { getNodeTsExpressStackBlock } from "./blocks/stack/nodeTsExpress";
@@ -108,6 +110,17 @@ export function composeAiMlStackBlock(config: ProjectConfig): string[] {
       return getRAnalyticsStackBlock();
     case "cpp-inference":
       return getCppInferenceStackBlock();
+    default:
+      return [];
+  }
+}
+
+export function composeDsaStackBlock(config: ProjectConfig): string[] {
+  switch (config.stack) {
+    case "dsa-cpp":
+      return getDsaCppStackBlock();
+    case "dsa-python":
+      return getDsaPythonStackBlock();
     default:
       return [];
   }

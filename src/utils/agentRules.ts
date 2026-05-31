@@ -4,6 +4,7 @@ import {
   composeAppTypeBlock,
   composeBackendStackBlock,
   composeCursorPrinciples,
+  composeDsaStackBlock,
   composeFrontendStackBlock,
   composeProfileBlock,
   composeSharedConstitution,
@@ -150,6 +151,11 @@ function buildStackRules(config: ProjectConfig): string[] {
     rules.push("", ...aiMlStackLines);
   }
 
+  const dsaStackLines = composeDsaStackBlock(config);
+  if (dsaStackLines.length > 0) {
+    rules.push("", ...dsaStackLines);
+  }
+
   switch (config.stack) {
     case "node-ts-express":
     case "nestjs":
@@ -161,24 +167,8 @@ function buildStackRules(config: ProjectConfig): string[] {
       break;
     case "react-vite":
     case "nextjs":
-      break;
     case "dsa-cpp":
-      rules.push(
-        "",
-        "### DSA C++ Rules",
-        "",
-        "Keep the runner simple and judge-compatible.",
-        "Do not introduce unnecessary classes or framework-style layers."
-      );
-      break;
     case "dsa-python":
-      rules.push(
-        "",
-        "### DSA Python Rules",
-        "",
-        "Prefer a direct solver function and a minimal runner.",
-        "Keep imports standard-library-first and avoid unnecessary helpers."
-      );
       break;
   }
 
