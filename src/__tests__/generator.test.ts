@@ -131,6 +131,11 @@ describe("ProjectGenerator", () => {
 
     expect(fs.existsSync(path.join(projectPath, "docs/AGENTS.md"))).toBe(true);
     expect(fs.existsSync(path.join(projectPath, "docs/instructions.md"))).toBe(true);
+    const docsAgents = await fs.readFile(path.join(projectPath, "docs/AGENTS.md"), "utf-8");
+    expect(docsAgents).toContain("JWT Rules");
+    expect(docsAgents).toContain("bcrypt Rules");
+    expect(docsAgents).toContain("PostgreSQL Rules");
+    expect(docsAgents).toContain("Redis Rules");
     const docsInstructions = await fs.readFile(path.join(projectPath, "docs/instructions.md"), "utf-8");
     expect(docsInstructions).toContain("Developer Setup & Playbook");
     expect(docsInstructions).toContain("npm install");
@@ -266,6 +271,13 @@ describe("ProjectGenerator", () => {
       "utf-8"
     );
     expect(cursorRules).toContain("Current stack: react-vite");
+    const docsAgents = await fs.readFile(
+      path.join(projectPath, "docs/AGENTS.md"),
+      "utf-8"
+    );
+    expect(docsAgents).toContain("Tailwind Rules");
+    expect(docsAgents).toContain("shadcn/ui Rules");
+    expect(docsAgents).toContain("TanStack Query Rules");
   });
 
   test("should create a Next.js frontend project", async () => {
@@ -328,6 +340,13 @@ describe("ProjectGenerator", () => {
       "utf-8"
     );
     expect(cursorRules).toContain("Current stack: nextjs");
+    const docsAgents = await fs.readFile(
+      path.join(projectPath, "docs/AGENTS.md"),
+      "utf-8"
+    );
+    expect(docsAgents).toContain("Tailwind Rules");
+    expect(docsAgents).toContain("shadcn/ui Rules");
+    expect(docsAgents).toContain("TanStack Query Rules");
   });
 
   test("should create an AI/ML FastAPI serving project", async () => {
@@ -385,6 +404,11 @@ describe("ProjectGenerator", () => {
       "utf-8"
     );
     expect(envExample).toContain("MLFLOW_TRACKING_URI=");
+    const docsAgents = await fs.readFile(
+      path.join(projectPath, "docs/AGENTS.md"),
+      "utf-8"
+    );
+    expect(docsAgents).toContain("Pytest Rules");
   });
 
   test("should create an AI/ML R analytics project", async () => {
@@ -478,6 +502,11 @@ describe("ProjectGenerator", () => {
       "utf-8"
     );
     expect(cmakeFile).toContain("enable_testing()");
+    const docsAgents = await fs.readFile(
+      path.join(projectPath, "docs/AGENTS.md"),
+      "utf-8"
+    );
+    expect(docsAgents).toContain("CTest Rules");
   });
 
   test("should create a DSA-specific C++ project", async () => {
@@ -541,6 +570,11 @@ describe("ProjectGenerator", () => {
       "utf-8"
     );
     expect(cursorRules).toContain("C++");
+    const docsAgents = await fs.readFile(
+      path.join(projectPath, "docs/AGENTS.md"),
+      "utf-8"
+    );
+    expect(docsAgents).toContain("CTest Rules");
   });
 
   test("should create a DSA-specific Python project", async () => {
@@ -598,6 +632,11 @@ describe("ProjectGenerator", () => {
       "utf-8"
     );
     expect(cursorRules).toContain("Python");
+    const docsAgents = await fs.readFile(
+      path.join(projectPath, "docs/AGENTS.md"),
+      "utf-8"
+    );
+    expect(docsAgents).toContain("Pytest Rules");
   });
 
   test("should create a Python FastAPI project", async () => {
