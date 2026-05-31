@@ -2,7 +2,8 @@ export type AppType = "backend" | "frontend" | "ai-ml" | "dsa-specific";
 
 export type SupportedStack = string;
 export type BackendStack = "node-ts-express" | "nestjs" | "python-fastapi";
-export type FrontendStack = "react-vite";
+export type FrontendStack = "react-vite" | "nextjs";
+export type AiMlStack = "python-fastapi-serving";
 
 export type BackendDatabase =
   | "postgresql"
@@ -51,24 +52,52 @@ export interface BackendGenerationConfig {
 
 export type FrontendStylingOption = "plain-css" | "tailwind";
 export type FrontendRoutingOption = "none" | "react-router";
+export type FrontendNextRouterOption = "app-router" | "pages-router";
 export type FrontendUiAddon = "none" | "shadcn-ui";
 export type FrontendStateOption = "none" | "context" | "zustand";
 export type FrontendDataFetchingOption = "fetch" | "tanstack-query";
-export type FrontendTestingOption = "vitest" | "vitest-rtl";
+export type FrontendTestingOption =
+  | "vitest"
+  | "vitest-rtl"
+  | "jest"
+  | "jest-rtl";
 export type FrontendBaselineSource = "auto" | "provider" | "local";
 
 export interface FrontendGenerationConfig {
-  template: "React + Vite";
+  template: "React + Vite" | "Next.js";
   stack: FrontendStack;
   projectDescription: string;
   appName: string;
   styling: FrontendStylingOption;
   routing: FrontendRoutingOption;
+  nextRouter?: FrontendNextRouterOption;
   uiAddon: FrontendUiAddon;
   stateManagement: FrontendStateOption;
   dataFetching: FrontendDataFetchingOption;
   testing: FrontendTestingOption;
   baselineSource: FrontendBaselineSource;
+}
+
+export type AiMlServingMode = "realtime-api" | "realtime-plus-batch";
+export type AiMlModelPackagingOption =
+  | "local-artifacts"
+  | "huggingface-compatible"
+  | "mlflow-ready";
+export type AiMlTrackingOption = "none" | "mlflow" | "wandb-ready";
+export type AiMlValidationOption = "pydantic" | "pydantic-plus-pandera";
+export type AiMlTestingOption = "pytest" | "pytest-httpx";
+
+export interface AiMlGenerationConfig {
+  template: "FastAPI Model Serving";
+  stack: AiMlStack;
+  projectDescription: string;
+  appName: string;
+  servingMode: AiMlServingMode;
+  modelPackaging: AiMlModelPackagingOption;
+  tracking: AiMlTrackingOption;
+  validation: AiMlValidationOption;
+  logging: "python-logging" | "structlog";
+  testing: AiMlTestingOption;
 }
 
 export interface TemplateOptions {
@@ -84,10 +113,15 @@ export interface TemplateOptions {
   apiStyle?: "rest";
   styling?: FrontendStylingOption;
   routing?: FrontendRoutingOption;
+  nextRouter?: FrontendNextRouterOption;
   uiAddon?: FrontendUiAddon;
   stateManagement?: FrontendStateOption;
   dataFetching?: FrontendDataFetchingOption;
   baselineSource?: FrontendBaselineSource;
+  servingMode?: AiMlServingMode;
+  modelPackaging?: AiMlModelPackagingOption;
+  tracking?: AiMlTrackingOption;
+  validation?: AiMlValidationOption;
 }
 
 export interface ProjectConfig {

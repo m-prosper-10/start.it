@@ -15,7 +15,6 @@ export const APP_TYPE_CHOICES: DisabledChoice[] = [
   {
     name: "AI / ML",
     value: "ai-ml",
-    disabled: "Coming soon",
   },
   {
     name: "DSA-specific",
@@ -44,8 +43,17 @@ export const STACK_CHOICES: Record<AppType, DisabledChoice[]> = {
       name: "React + Vite",
       value: "react-vite",
     },
+    {
+      name: "Next.js",
+      value: "nextjs",
+    },
   ],
-  "ai-ml": [],
+  "ai-ml": [
+    {
+      name: "Python + FastAPI Serving",
+      value: "python-fastapi-serving",
+    },
+  ],
   "dsa-specific": [],
 };
 
@@ -61,7 +69,10 @@ export function getFrameworkForStack(stack: SupportedStack): string {
     case "python-fastapi":
       return "Python";
     case "react-vite":
+    case "nextjs":
       return "Frontend";
+    case "python-fastapi-serving":
+      return "Python";
     default:
       throw new Error(`Unsupported stack "${stack}"`);
   }
