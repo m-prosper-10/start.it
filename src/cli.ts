@@ -31,6 +31,11 @@ import {
   FrontendStylingOption,
   FrontendTestingOption,
   FrontendUiAddon,
+  DsaGenerationConfig,
+  DsaInputMode,
+  DsaStack,
+  DsaTestingOption,
+  DsaTrackOption,
   ProjectConfig,
   SupportedStack,
 } from "./types";
@@ -177,6 +182,21 @@ const AI_ML_CPP_LOGGING_CHOICES: { name: string; value: AiMlLoggingOption }[] = 
   { name: "spdlog-ready", value: "spdlog-ready" },
 ];
 
+const DSA_TRACK_CHOICES: { name: string; value: DsaTrackOption }[] = [
+  { name: "Competitive programming", value: "competitive-programming" },
+  { name: "Interview preparation", value: "interview-prep" },
+];
+
+const DSA_INPUT_MODE_CHOICES: { name: string; value: DsaInputMode }[] = [
+  { name: "stdin / stdout", value: "stdin-stdout" },
+  { name: "Function-first runner", value: "function-first" },
+];
+
+const DSA_TESTING_CHOICES: { name: string; value: DsaTestingOption }[] = [
+  { name: "Manual sample cases", value: "manual-cases" },
+  { name: "CTest", value: "ctest" },
+];
+
 async function main() {
   console.log(chalk.bold.cyan("\n🚀 Welcome to start-it!\n"));
   console.log(chalk.gray("Create a project from guided stack selections.\n"));
@@ -256,6 +276,14 @@ async function promptForProjectMetadata(appType: AppType): Promise<{
             "Recommendation engine",
             "Internal ML utility",
           ]
+        : appType === "dsa-specific"
+          ? [
+              "Competitive programming workbook",
+              "Interview prep workspace",
+              "Algorithms kata repository",
+              "Contest practice set",
+              "Data structures revision kit",
+            ]
         : [
             "General business API",
             "SaaS platform API",
@@ -388,6 +416,30 @@ async function buildProjectConfig(
         validation: aiMlOptions.validation,
         logging: aiMlOptions.logging,
         testing: aiMlOptions.testing,
+      },
+    };
+  }
+
+  if (appType === "dsa-specific") {
+    const dsaOptions = await promptForDsaOptions(
+      projectMeta.projectName,
+      stack as DsaStack
+    );
+
+    return {
+      appType,
+      framework: getFrameworkForStack(stack),
+      stack,
+      projectName: projectMeta.projectName,
+      projectPath: process.cwd(),
+      options: {
+        template: getDsaTemplateName(stack as DsaStack),
+        stack: stack as DsaStack,
+        projectDescription: projectMeta.projectDescription,
+        appName: dsaOptions.appName,
+        track: dsaOptions.track,
+        inputMode: dsaOptions.inputMode,
+        testing: dsaOptions.testing,
       },
     };
   }
@@ -737,6 +789,62 @@ function getAiMlTemplateName(
   }
 }
 
+async function promptForDsaOptions(
+  projectName: string,
+  stack: DsaStack
+): Promise<Pick<DsaGenerationConfig, "appName" | "track" | "inputMode" | "testing">> {
+  if (stack !== "dsa-cpp") {
+    throw new Error(`Unsupported dsa stack "${stack}"`);
+  }
+
+  return inquirer.prompt([
+    {
+      type: "input",
+      name: "appName",
+      message: "Workspace name for metadata:",
+      default: projectName,
+      validate: (input: string) => {
+        if (!input.trim()) {
+          return "Workspace name cannot be empty";
+        }
+        return true;
+      },
+    },
+    {
+      type: "list",
+      name: "track",
+      message: "Choose the primary DSA workflow:",
+      choices: DSA_TRACK_CHOICES,
+      default: "competitive-programming",
+    },
+    {
+      type: "list",
+      name: "inputMode",
+      message: "Choose the runner style:",
+      choices: DSA_INPUT_MODE_CHOICES,
+      default: (answers: { track: DsaTrackOption }) =>
+        answers.track === "interview-prep" ? "function-first" : "stdin-stdout",
+    },
+    {
+      type: "list",
+      name: "testing",
+      message: "Choose the verification setup:",
+      choices: DSA_TESTING_CHOICES,
+      default: (answers: { track: DsaTrackOption }) =>
+        answers.track === "interview-prep" ? "ctest" : "manual-cases",
+    },
+  ]);
+}
+
+function getDsaTemplateName(
+  stack: DsaStack
+): DsaGenerationConfig["template"] {
+  switch (stack) {
+    case "dsa-cpp":
+      return "C++ DSA Workspace";
+  }
+}
+
 function getNextSteps(stack: SupportedStack): string[] {
   switch (stack) {
     case "python-fastapi":
@@ -749,6 +857,7 @@ function getNextSteps(stack: SupportedStack): string[] {
     case "r-analytics":
       return ["Rscript scripts/run_pipeline.R"];
     case "cpp-inference":
+    case "dsa-cpp":
       return [
         "cmake -S . -B build",
         "cmake --build build",

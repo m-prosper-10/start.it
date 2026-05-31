@@ -145,7 +145,11 @@ export interface TemplateOptions {
   securityPreset?: BackendSecurityPreset;
   logging?: BackendLoggingOption | AiMlLoggingOption;
   monitoring?: BackendMonitoringOption;
-  testing?: BackendTestingOption | FrontendTestingOption | AiMlTestingOption;
+  testing?:
+    | BackendTestingOption
+    | FrontendTestingOption
+    | AiMlTestingOption
+    | DsaTestingOption;
   apiStyle?: "rest";
   styling?: FrontendStylingOption;
   routing?: FrontendRoutingOption;

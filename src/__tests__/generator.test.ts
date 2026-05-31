@@ -470,6 +470,68 @@ describe("ProjectGenerator", () => {
     expect(cmakeFile).toContain("enable_testing()");
   });
 
+  test("should create a DSA-specific C++ project", async () => {
+    const config: ProjectConfig = {
+      appType: "dsa-specific",
+      framework: "C++",
+      stack: "dsa-cpp",
+      projectName: "test-dsa-cpp",
+      projectPath: testDir,
+      options: {
+        template: "C++ DSA Workspace",
+        stack: "dsa-cpp",
+        projectDescription: "MVP Competitive programming workbook",
+        appName: "test-dsa-cpp",
+        track: "competitive-programming",
+        inputMode: "stdin-stdout",
+        testing: "ctest",
+      },
+    };
+
+    const generator = new ProjectGenerator(config);
+    await generator.generate();
+
+    const projectPath = path.join(testDir, "test-dsa-cpp");
+    expect(fs.existsSync(projectPath)).toBe(true);
+    expect(fs.existsSync(path.join(projectPath, "CMakeLists.txt"))).toBe(true);
+    expect(fs.existsSync(path.join(projectPath, "include/solver.hpp"))).toBe(true);
+    expect(fs.existsSync(path.join(projectPath, "src/solver.cpp"))).toBe(true);
+    expect(fs.existsSync(path.join(projectPath, "src/main.cpp"))).toBe(true);
+    expect(fs.existsSync(path.join(projectPath, "problems/two_sum.md"))).toBe(true);
+    expect(fs.existsSync(path.join(projectPath, "examples/sample_input.txt"))).toBe(
+      true
+    );
+    expect(fs.existsSync(path.join(projectPath, "tests/test_solver.cpp"))).toBe(
+      true
+    );
+
+    const mainFile = await fs.readFile(
+      path.join(projectPath, "src/main.cpp"),
+      "utf-8"
+    );
+    expect(mainFile).toContain("std::ios::sync_with_stdio(false)");
+    expect(mainFile).toContain("std::cin >> count >> target");
+
+    const readme = await fs.readFile(
+      path.join(projectPath, "README.md"),
+      "utf-8"
+    );
+    expect(readme).toContain("competitive-programming");
+    expect(readme).toContain("stdin/stdout execution");
+
+    const cmakeFile = await fs.readFile(
+      path.join(projectPath, "CMakeLists.txt"),
+      "utf-8"
+    );
+    expect(cmakeFile).toContain("enable_testing()");
+
+    const cursorRules = await fs.readFile(
+      path.join(projectPath, ".cursorrules"),
+      "utf-8"
+    );
+    expect(cursorRules).toContain("C++");
+  });
+
   test("should create a Python FastAPI project", async () => {
     const config: ProjectConfig = {
       appType: "backend",
