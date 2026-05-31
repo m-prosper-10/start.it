@@ -290,7 +290,7 @@ function getBackendOptions(config: ProjectConfig): BackendGenerationConfig {
     appName: config.options?.appName || config.projectName,
     databases: config.options?.databases || [],
     securityPreset: config.options?.securityPreset || "none",
-    logging: config.options?.logging || "console",
+    logging: normalizeNestLogging(config.options?.logging),
     monitoring: config.options?.monitoring || "health-only",
     testing: normalizeNestTesting(config.options?.testing),
     apiStyle: config.options?.apiStyle || "rest",
@@ -303,6 +303,12 @@ function normalizeNestTesting(
   return testing === "jest" || testing === "jest-supertest"
     ? testing
     : "jest-supertest";
+}
+
+function normalizeNestLogging(
+  logging: TemplateOptions["logging"] | undefined
+): BackendGenerationConfig["logging"] {
+  return logging === "console" || logging === "pino" ? logging : "console";
 }
 
 function buildPackageJson(projectName: string, options: BackendGenerationConfig): string {

@@ -155,7 +155,7 @@ function getBackendOptions(config: ProjectConfig): BackendGenerationConfig {
     appName: config.options?.appName || config.projectName,
     databases: config.options?.databases || [],
     securityPreset: config.options?.securityPreset || "none",
-    logging: config.options?.logging || "python-logging",
+    logging: normalizeFastApiLogging(config.options?.logging),
     monitoring: config.options?.monitoring || "health-only",
     testing: normalizeFastApiTesting(config.options?.testing),
     apiStyle: config.options?.apiStyle || "rest",
@@ -168,6 +168,14 @@ function normalizeFastApiTesting(
   return testing === "pytest" || testing === "pytest-httpx"
     ? testing
     : "pytest-httpx";
+}
+
+function normalizeFastApiLogging(
+  logging: TemplateOptions["logging"] | undefined
+): BackendGenerationConfig["logging"] {
+  return logging === "python-logging" || logging === "structlog"
+    ? logging
+    : "python-logging";
 }
 
 function buildRequirements(options: BackendGenerationConfig): string {

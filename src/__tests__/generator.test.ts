@@ -379,6 +379,97 @@ describe("ProjectGenerator", () => {
     expect(envExample).toContain("MLFLOW_TRACKING_URI=");
   });
 
+  test("should create an AI/ML R analytics project", async () => {
+    const config: ProjectConfig = {
+      appType: "ai-ml",
+      framework: "R",
+      stack: "r-analytics",
+      projectName: "test-r-analytics",
+      projectPath: testDir,
+      options: {
+        template: "R Analytics Pipeline",
+        stack: "r-analytics",
+        projectDescription: "Production baseline Recommendation engine",
+        appName: "test-r-analytics",
+        executionMode: "batch-plus-report",
+        modelPackaging: "mlflow-ready",
+        tracking: "mlflow",
+        validation: "base-checks",
+        logging: "r-logger",
+        testing: "testthat",
+      },
+    };
+
+    const generator = new ProjectGenerator(config);
+    await generator.generate();
+
+    const projectPath = path.join(testDir, "test-r-analytics");
+    expect(fs.existsSync(projectPath)).toBe(true);
+    expect(fs.existsSync(path.join(projectPath, "DESCRIPTION"))).toBe(true);
+    expect(fs.existsSync(path.join(projectPath, "R/pipeline.R"))).toBe(true);
+    expect(fs.existsSync(path.join(projectPath, "R/tracking.R"))).toBe(true);
+    expect(fs.existsSync(path.join(projectPath, "scripts/run_pipeline.R"))).toBe(true);
+    expect(fs.existsSync(path.join(projectPath, "tests/testthat/test-pipeline.R"))).toBe(true);
+
+    const pipelineFile = await fs.readFile(
+      path.join(projectPath, "R/pipeline.R"),
+      "utf-8"
+    );
+    expect(pipelineFile).toContain("write_report");
+
+    const readme = await fs.readFile(
+      path.join(projectPath, "README.md"),
+      "utf-8"
+    );
+    expect(readme).toContain("R analytics pipeline");
+  });
+
+  test("should create an AI/ML C++ inference project", async () => {
+    const config: ProjectConfig = {
+      appType: "ai-ml",
+      framework: "C++",
+      stack: "cpp-inference",
+      projectName: "test-cpp-inference",
+      projectPath: testDir,
+      options: {
+        template: "C++ Inference Utility",
+        stack: "cpp-inference",
+        projectDescription: "MVP Internal ML utility",
+        appName: "test-cpp-inference",
+        runtimeMode: "batch-cli",
+        modelPackaging: "onnx-ready",
+        tracking: "none",
+        validation: "base-checks",
+        logging: "spdlog-ready",
+        testing: "ctest",
+      },
+    };
+
+    const generator = new ProjectGenerator(config);
+    await generator.generate();
+
+    const projectPath = path.join(testDir, "test-cpp-inference");
+    expect(fs.existsSync(projectPath)).toBe(true);
+    expect(fs.existsSync(path.join(projectPath, "CMakeLists.txt"))).toBe(true);
+    expect(fs.existsSync(path.join(projectPath, "include/model_runner.hpp"))).toBe(true);
+    expect(fs.existsSync(path.join(projectPath, "src/model_runner.cpp"))).toBe(true);
+    expect(fs.existsSync(path.join(projectPath, "src/main.cpp"))).toBe(true);
+    expect(fs.existsSync(path.join(projectPath, "tests/test_main.cpp"))).toBe(true);
+
+    const mainFile = await fs.readFile(
+      path.join(projectPath, "src/main.cpp"),
+      "utf-8"
+    );
+    expect(mainFile).toContain("batch mode enabled");
+    expect(mainFile).toContain("[spdlog-ready]");
+
+    const cmakeFile = await fs.readFile(
+      path.join(projectPath, "CMakeLists.txt"),
+      "utf-8"
+    );
+    expect(cmakeFile).toContain("enable_testing()");
+  });
+
   test("should create a Python FastAPI project", async () => {
     const config: ProjectConfig = {
       appType: "backend",
