@@ -532,6 +532,62 @@ describe("ProjectGenerator", () => {
     expect(cursorRules).toContain("C++");
   });
 
+  test("should create a DSA-specific Python project", async () => {
+    const config: ProjectConfig = {
+      appType: "dsa-specific",
+      framework: "Python",
+      stack: "dsa-python",
+      projectName: "test-dsa-python",
+      projectPath: testDir,
+      options: {
+        template: "Python DSA Workspace",
+        stack: "dsa-python",
+        projectDescription: "MVP Interview prep workspace",
+        appName: "test-dsa-python",
+        track: "interview-prep",
+        inputMode: "function-first",
+        testing: "pytest",
+      },
+    };
+
+    const generator = new ProjectGenerator(config);
+    await generator.generate();
+
+    const projectPath = path.join(testDir, "test-dsa-python");
+    expect(fs.existsSync(projectPath)).toBe(true);
+    expect(fs.existsSync(path.join(projectPath, "main.py"))).toBe(true);
+    expect(fs.existsSync(path.join(projectPath, "src/solver.py"))).toBe(true);
+    expect(fs.existsSync(path.join(projectPath, "tests/test_solver.py"))).toBe(true);
+    expect(fs.existsSync(path.join(projectPath, "requirements.txt"))).toBe(true);
+    expect(fs.existsSync(path.join(projectPath, "problems/two_sum.md"))).toBe(true);
+
+    const mainFile = await fs.readFile(
+      path.join(projectPath, "main.py"),
+      "utf-8"
+    );
+    expect(mainFile).toContain("nums = [2, 7, 11, 15]");
+    expect(mainFile).toContain('print(f"two_sum indices: {format_answer(answer)}")');
+
+    const solverFile = await fs.readFile(
+      path.join(projectPath, "src/solver.py"),
+      "utf-8"
+    );
+    expect(solverFile).toContain("def solve_two_sum");
+    expect(solverFile).toContain("keep the solver easy to explain");
+
+    const requirements = await fs.readFile(
+      path.join(projectPath, "requirements.txt"),
+      "utf-8"
+    );
+    expect(requirements).toContain("pytest==");
+
+    const cursorRules = await fs.readFile(
+      path.join(projectPath, ".cursorrules"),
+      "utf-8"
+    );
+    expect(cursorRules).toContain("Python");
+  });
+
   test("should create a Python FastAPI project", async () => {
     const config: ProjectConfig = {
       appType: "backend",
