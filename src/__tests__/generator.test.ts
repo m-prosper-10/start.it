@@ -133,6 +133,74 @@ describe("ProjectGenerator", () => {
     expect(docsInstructions).toContain("Node.js");
   });
 
+  test("should create a NestJS API project", async () => {
+    const config: ProjectConfig = {
+      appType: "backend",
+      framework: "Node.js",
+      stack: "nestjs",
+      projectName: "test-nest-app",
+      projectPath: testDir,
+      options: {
+        template: "NestJS API",
+        stack: "nestjs",
+        projectDescription: "Production baseline SaaS platform API",
+        appName: "test-nest-app",
+        databases: ["mongodb", "redis"],
+        securityPreset: "argon2-jwt",
+        logging: "pino",
+        monitoring: "prometheus-ready",
+        testing: "jest-supertest",
+        apiStyle: "rest",
+      },
+    };
+
+    const generator = new ProjectGenerator(config);
+    await generator.generate();
+
+    const projectPath = path.join(testDir, "test-nest-app");
+    expect(fs.existsSync(projectPath)).toBe(true);
+    expect(fs.existsSync(path.join(projectPath, "package.json"))).toBe(true);
+    expect(fs.existsSync(path.join(projectPath, "nest-cli.json"))).toBe(true);
+    expect(fs.existsSync(path.join(projectPath, "src/main.ts"))).toBe(true);
+    expect(fs.existsSync(path.join(projectPath, "src/app.module.ts"))).toBe(true);
+    expect(
+      fs.existsSync(path.join(projectPath, "src/example/example.module.ts"))
+    ).toBe(true);
+    expect(
+      fs.existsSync(path.join(projectPath, "src/common/security/security.service.ts"))
+    ).toBe(true);
+    expect(
+      fs.existsSync(path.join(projectPath, "src/metrics/metrics.controller.ts"))
+    ).toBe(true);
+
+    const packageJson = await fs.readFile(
+      path.join(projectPath, "package.json"),
+      "utf-8"
+    );
+    expect(packageJson).toContain("\"@nestjs/common\"");
+    expect(packageJson).toContain("\"nestjs-pino\"");
+    expect(packageJson).toContain("\"mongodb\"");
+    expect(packageJson).toContain("\"redis\"");
+    expect(packageJson).toContain("\"argon2\"");
+    expect(packageJson).toContain("\"@nestjs/jwt\"");
+    expect(packageJson).toContain("\"prom-client\"");
+
+    const appModule = await fs.readFile(
+      path.join(projectPath, "src/app.module.ts"),
+      "utf-8"
+    );
+    expect(appModule).toContain("MetricsModule");
+    expect(appModule).toContain("LoggerModule.forRoot");
+
+    const envExample = await fs.readFile(
+      path.join(projectPath, ".env.example"),
+      "utf-8"
+    );
+    expect(envExample).toContain("MONGODB_URL=");
+    expect(envExample).toContain("REDIS_URL=");
+    expect(envExample).toContain("JWT_SECRET=");
+  });
+
   test("should create a Python FastAPI project", async () => {
     const config: ProjectConfig = {
       appType: "backend",

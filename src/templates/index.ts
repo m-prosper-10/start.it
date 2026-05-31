@@ -4,6 +4,7 @@ import { flutterTemplates } from "./flutter";
 import { reactNativeTemplates } from "./react-native";
 import { springBootTemplates } from "./spring-boot";
 import { buildNodeTemplate } from "./node";
+import { buildNestTemplate } from "./nest";
 import { pythonTemplates } from "./python";
 
 const allTemplates: Record<string, Record<string, TemplateConfig>> = {
@@ -17,6 +18,10 @@ const allTemplates: Record<string, Record<string, TemplateConfig>> = {
 export function getTemplate(config: ProjectConfig): TemplateConfig {
   if (config.stack === "node-ts-express") {
     return buildNodeTemplate(config);
+  }
+
+  if (config.stack === "nestjs") {
+    return buildNestTemplate(config);
   }
 
   const frameworkTemplates = allTemplates[config.framework];
