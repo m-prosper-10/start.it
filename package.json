@@ -1,6 +1,6 @@
 {
   "name": "starterx",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A guided CLI for scaffolding backend, frontend, AI/ML, and DSA project baselines",
   "main": "dist/index.js",
   "bin": {
