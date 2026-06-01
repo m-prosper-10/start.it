@@ -1,4 +1,4 @@
-# Contributing to start-it
+# Contributing to starterx
 
 This repository now uses an app-type-driven generation workflow. Contributions should fit that architecture rather than only adding flat static templates.
 

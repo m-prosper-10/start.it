@@ -1,12 +1,12 @@
 # 🤖 Agent Playbook & Architecture Manual
 
-Welcome, AI Agent! This document acts as your playground, playbook, and context provider for working on the `start-it-cli` codebase. It outlines the overall architecture, code conventions, extension workflows, and safety guidelines to ensure your modifications are clean, robust, and aligned with the patterns of this repository.
+Welcome, AI Agent! This document acts as your playground, playbook, and context provider for working on the `starterx` codebase. It outlines the overall architecture, code conventions, extension workflows, and safety guidelines to ensure your modifications are clean, robust, and aligned with the patterns of this repository.
 
 ---
 
 ## 🧭 System Architecture
 
-The `start-it-cli` tool operates on two main pillars of project scaffolding: **Traditional (Template-based)** and **AI-Powered (Smart Recommendations)**. 
+The `starterx` tool operates on two main pillars of project scaffolding: **Traditional (Template-based)** and **AI-Powered (Smart Recommendations)**. 
 
 Below is a flow diagram illustrating the operational pipeline of the CLI:
 

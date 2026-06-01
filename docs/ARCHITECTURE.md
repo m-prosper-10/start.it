@@ -1,6 +1,6 @@
 # Architecture
 
-`start-it-cli` is organized around a typed generation pipeline.
+`starterx` is organized around a typed generation pipeline.
 
 ## Main Flow
 

@@ -1,19 +1,19 @@
 # Usage Reference
 
-This document covers the command-line usage patterns for `start-it-cli`, including interactive, partially guided, and non-interactive generation.
+This document covers the command-line usage patterns for `starterx`, including interactive, partially guided, and non-interactive generation.
 
 ## Basic Usage
 
 Run the CLI in fully guided mode:
 
 ```bash
-start-it-cli
+starterx
 ```
 
 Or provide the project name up front:
 
 ```bash
-start-it-cli my-app
+starterx my-app
 ```
 
 ## Output Directory
@@ -21,7 +21,7 @@ start-it-cli my-app
 Use `--path`, `--dir`, or `--directory` to choose the base directory where the project folder will be created:
 
 ```bash
-start-it-cli my-app --path ~/projects
+starterx my-app --path ~/projects
 ```
 
 This creates:
@@ -49,7 +49,7 @@ This creates:
 ### Fully Interactive
 
 ```bash
-start-it-cli
+starterx
 ```
 
 The CLI asks for everything.
@@ -57,7 +57,7 @@ The CLI asks for everything.
 ### Partially Guided
 
 ```bash
-start-it-cli fire_extinguisher_ms --app-type backend --stack python-fastapi
+starterx fire_extinguisher_ms --app-type backend --stack python-fastapi
 ```
 
 The provided values are used directly, and the remaining values are prompted for.
@@ -65,7 +65,7 @@ The provided values are used directly, and the remaining values are prompted for
 ### Non-Interactive Defaults
 
 ```bash
-start-it-cli fire_extinguisher_ms --app-type backend --stack python-fastapi --yes
+starterx fire_extinguisher_ms --app-type backend --stack python-fastapi --yes
 ```
 
 Any missing values are filled from defaults instead of prompting.
@@ -77,7 +77,7 @@ If you provide `--stack` without `--app-type`, the CLI infers the app type autom
 Example:
 
 ```bash
-start-it-cli ui-console --stack react-vite --yes
+starterx ui-console --stack react-vite --yes
 ```
 
 ## Backend Flags
@@ -93,7 +93,7 @@ start-it-cli ui-console --stack react-vite --yes
 Example:
 
 ```bash
-start-it-cli fire_extinguisher_ms \
+starterx fire_extinguisher_ms \
   --app-type backend \
   --stack python-fastapi \
   --path ~/services \
@@ -120,7 +120,7 @@ start-it-cli fire_extinguisher_ms \
 Example:
 
 ```bash
-start-it-cli ops-console \
+starterx ops-console \
   --stack react-vite \
   --profile startup \
   --styling tailwind \
@@ -147,7 +147,7 @@ start-it-cli ops-console \
 Example:
 
 ```bash
-start-it-cli model-serving \
+starterx model-serving \
   --stack python-fastapi-serving \
   --profile production \
   --serving-mode realtime-plus-batch \
@@ -170,7 +170,7 @@ start-it-cli model-serving \
 Example:
 
 ```bash
-start-it-cli algo-lab \
+starterx algo-lab \
   --stack dsa-python \
   --track interview-prep \
   --input-mode function-first \
@@ -183,5 +183,5 @@ start-it-cli algo-lab \
 Print the command reference:
 
 ```bash
-start-it-cli --help
+starterx --help
 ```

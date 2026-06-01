@@ -5,19 +5,19 @@ Get a project scaffolded with the current guided workflow in a few minutes.
 ## Install
 
 ```bash
-npm install -g start-it-cli
+npm install -g starterx
 ```
 
 Or run directly:
 
 ```bash
-npx start-it-cli
+npx starterx
 ```
 
 ## Create A Project
 
 ```bash
-start-it-cli
+starterx
 ```
 
 The CLI will ask for:

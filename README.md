@@ -1,6 +1,6 @@
-# start-it
+# starterx
 
-`start-it` is a guided CLI for scaffolding opinionated project baselines across backend, frontend, AI/ML, and DSA workflows.
+`starterx` is a guided CLI for scaffolding opinionated project baselines across backend, frontend, AI/ML, and DSA workflows.
 
 Instead of asking users to pick from a flat template list, the CLI now walks through:
 
@@ -46,19 +46,19 @@ The prompt flow is stack-aware.
 ## Installation
 
 ```bash
-npm install -g start-it-cli
+npm install -g starterx
 ```
 
 Or run it without installing:
 
 ```bash
-npx start-it-cli
+npx starterx
 ```
 
 ## Usage
 
 ```bash
-start-it-cli
+starterx
 ```
 
 The CLI then guides the project setup interactively.

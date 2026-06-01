@@ -76,7 +76,7 @@ Tags are generated from:
 ```bash
 npm test
 npm run build
-docker build -t start-it-cli:local .
+docker build -t starterx:local .
 ```
 
 ## When Updating Workflows
