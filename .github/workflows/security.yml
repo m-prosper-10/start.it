@@ -15,9 +15,8 @@ permissions:
 
 jobs:
   dependency-review:
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' && vars.ENABLE_DEPENDENCY_REVIEW == 'true'
     runs-on: ubuntu-latest
-    continue-on-error: true
     permissions:
       contents: read
       pull-requests: write
@@ -93,7 +92,8 @@ jobs:
           console.log("No blocking high/critical production vulnerabilities found.");
           NODE
 
-      - name: Audit full dependency tree (with temporary lodash exception)
+      - name: Audit full dependency tree (informational)
+        continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
@@ -133,7 +133,7 @@ jobs:
           }
 
           if (failing.length > 0) {
-            console.error("High/Critical vulnerabilities found (excluding temporary lodash exception):");
+            console.error("High/Critical vulnerabilities found in full tree (excluding temporary lodash exception):");
             for (const item of failing) {
               console.error(`- ${item.pkg} (${item.severity})`);
             }
