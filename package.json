@@ -1,10 +1,10 @@
 {
-  "name": "start-it-cli",
+  "name": "starterx",
   "version": "1.0.1",
   "description": "A guided CLI for scaffolding backend, frontend, AI/ML, and DSA project baselines",
   "main": "dist/index.js",
   "bin": {
-    "start-it-cli": "dist/cli.js"
+    "starterx": "dist/cli.js"
   },
   "scripts": {
     "build": "tsc",

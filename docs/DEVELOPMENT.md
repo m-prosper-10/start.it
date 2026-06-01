@@ -1,6 +1,6 @@
 # Development Guide
 
-This document covers local development workflow for `start-it-cli`.
+This document covers local development workflow for `starterx`.
 
 ## Prerequisites
 
@@ -82,6 +82,6 @@ npm pack --dry-run
 ## Docker Smoke Check
 
 ```bash
-docker build -t start-it-cli:local .
-docker run --rm start-it-cli:local --help
+docker build -t starterx:local .
+docker run --rm starterx:local --help
 ```

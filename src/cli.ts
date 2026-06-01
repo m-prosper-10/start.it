@@ -236,7 +236,7 @@ const DSA_PYTHON_TESTING_CHOICES: { name: string; value: DsaTestingOption }[] = 
 ];
 
 async function main() {
-  console.log(chalk.bold.cyan("\n🚀 Welcome to start-it!\n"));
+  console.log(chalk.bold.cyan("\n🚀 Welcome to starterx!\n"));
   console.log(chalk.gray("Create a project from guided stack selections.\n"));
 
   try {
@@ -1327,7 +1327,7 @@ function inferAppTypeFromStack(stack: SupportedStack): AppType {
 
 function printHelp() {
   console.log(`Usage:
-  start-it-cli [project-name] [options]
+  starterx [project-name] [options]
 
 Core options:
   --name, --project-name <name>     Project name
