@@ -1,0 +1,91 @@
+name: Release NPM
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - package.json
+      - package-lock.json
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || github.actor != 'github-actions[bot]'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Test
+        run: npm test
+
+      - name: Detect version change
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          CURRENT_VERSION="$(node -p "require('./package.json').version")"
+          CURRENT_NAME="$(node -p "require('./package.json').name")"
+
+          if git rev-parse HEAD^ >/dev/null 2>&1; then
+            PREVIOUS_VERSION="$(git show HEAD^:package.json | node -e "process.stdin.on('data', d => process.stdout.write(JSON.parse(d).version))")"
+          else
+            PREVIOUS_VERSION=""
+          fi
+
+          echo "current_version=${CURRENT_VERSION}" >> "$GITHUB_OUTPUT"
+          echo "package_name=${CURRENT_NAME}" >> "$GITHUB_OUTPUT"
+
+          if [ -n "$PREVIOUS_VERSION" ] && [ "$CURRENT_VERSION" = "$PREVIOUS_VERSION" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No version change detected (${CURRENT_VERSION})."
+            exit 0
+          fi
+
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          echo "Version change detected: ${PREVIOUS_VERSION:-<none>} -> ${CURRENT_VERSION}"
+
+      - name: Check if version already exists on npm
+        if: steps.version.outputs.changed == 'true'
+        id: npm_check
+        shell: bash
+        run: |
+          set -euo pipefail
+          PKG="${{ steps.version.outputs.package_name }}"
+          VER="${{ steps.version.outputs.current_version }}"
+
+          if npm view "${PKG}@${VER}" version >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "${PKG}@${VER} is already published. Skipping publish."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "${PKG}@${VER} is not published yet."
+          fi
+
+      - name: Publish to npm
+        if: steps.version.outputs.changed == 'true' && steps.npm_check.outputs.exists == 'false'
+        run: npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

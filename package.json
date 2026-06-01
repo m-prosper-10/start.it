@@ -1,15 +1,15 @@
 {
   "name": "starterx",
-  "version": "1.0.1",
+  "version": "2.0.2",
   "description": "A guided CLI for scaffolding backend, frontend, AI/ML, and DSA project baselines",
   "main": "dist/index.js",
   "bin": {
     "starterx": "dist/cli.js"
   },
   "scripts": {
-    "build": "tsc",
-    "dev": "ts-node src/cli.ts",
-    "start": "node dist/cli.js",
+    "build": "node init && tsc",
+    "dev": "node init && ts-node src/cli.ts",
+    "start": "node init && node dist/cli.js",
     "test": "jest",
     "prepublishOnly": "npm run build"
   },
